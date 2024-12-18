@@ -1,0 +1,35 @@
+/* App.css */
+body {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .bg-secondary {
+    background-color: #9B2C2C;
+  }
+  
+  .hover\\:bg-secondary-dark:hover {
+    background-color: #7A1A1A;
+  }
+  
+  .container {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  /* Tailwind customizations */
+  .bg-gray-900 {
+    background-color: #1A202C;
+  }
+  
+  .bg-gray-800 {
+    background-color: #2D3748;
+  }
+  
+  .bg-gray-700 {
+    background-color: #4A5568;
+  }
+  
+  .bg-gray-100 {
+    background-color: #F7FAFC;
+  }
+  
