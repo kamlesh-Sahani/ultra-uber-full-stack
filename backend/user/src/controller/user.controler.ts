@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import {Request,Response} from "express"
 import userModel from "../models/user.model.js";
 import { generateToken } from "../utils/utils.js";
 
-export const userRegister = async (req:Request,res:Response):Promise<Response>=>{
+export const userRegister = async (req:Request,res:Response)=>{
     try {
         const {name,email,password,safety,gender,isStudent,contact} =  req.body;
         if(!name || !email || !password || !gender || !isStudent || !contact){
@@ -53,4 +53,49 @@ export const userRegister = async (req:Request,res:Response):Promise<Response>=>
             message:error.message || "internal error"
         })
     }
+}
+export const userLogin = async(req:Request,res:Response)=>{
+try {
+    const {email,password} = req.body;
+    if(!email || !password){
+        return res.status(401).json({
+            success:false,
+            message:"please fill the all fields"
+        })
+    }
+    const user = await userModel.findOne({email}).select("+password");
+    if(!user){
+        return res.status(404).json({
+            success:false,
+            message:"user is not found"
+        })
+    }
+
+    const isMatched = await user.isPasswordMatch(password);
+    if(!isMatched){
+        return res.status(401).json({
+            success:false,
+            message:"email or password is not matched"
+        })
+    };
+
+    const token = generateToken(user);
+    res.cookie("auth-token",token,{
+        maxAge:24*60*60*1000,
+        httpOnly:true,
+        secure:process.env.NODE_ENV=="production"
+    })
+
+    return res.status(200).json({
+        success:true,
+        message:"user successuly logined",
+        token,
+        user
+    })
+} catch (error:any) {
+    return res.status(500).json({
+        success:false,
+        message:error.message||"internal error"
+    })
+}
 }

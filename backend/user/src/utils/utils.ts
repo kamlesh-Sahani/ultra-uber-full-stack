@@ -5,3 +5,4 @@ export const generateToken = (newUser: UserType) => {
     const token = jwt.sign({ _id: newUser._id }, secret, { expiresIn: "2d" });
     return token;
 }
+

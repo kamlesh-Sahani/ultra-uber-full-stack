@@ -34,7 +34,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "please enter the password"]
+        required: [true, "please enter the password"],
+        select: false
     }
 });
 userSchema.pre("save", async function (next) {
@@ -43,5 +44,8 @@ userSchema.pre("save", async function (next) {
     }
     next();
 });
+userSchema.methods.isPasswordMatch = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
 const userModel = mongoose.models?.User || mongoose.model("User", userSchema);
 export default userModel;

@@ -2,7 +2,7 @@
   "name": "user-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
-    "@types/express": "^5.0.0",
+    "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.7",
     "nodemon": "^3.1.9",
     "typescript": "^5.7.2"

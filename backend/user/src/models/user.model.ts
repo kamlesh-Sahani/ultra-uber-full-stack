@@ -11,6 +11,7 @@ export interface UserType extends Document{
     }[],
     isStudent:boolean;
     password:string;
+    isPasswordMatch:(password:string)=>boolean;
 }
 
 const userSchema = new mongoose.Schema<UserType>({
@@ -48,7 +49,8 @@ const userSchema = new mongoose.Schema<UserType>({
     },
     password:{
         type:String,
-        required:[true,"please enter the password"]
+        required:[true,"please enter the password"],
+        select:false
     }
 })
 
@@ -59,6 +61,9 @@ userSchema.pre("save", async function(next){
     next()
 });
 
+userSchema.methods.isPasswordMatch = async function (password:string){
+    return await bcrypt.compare(password,this.password);
+}
 
 
 const userModel = mongoose.models?.User as mongoose.Model<UserType> || mongoose.model("User",userSchema);
