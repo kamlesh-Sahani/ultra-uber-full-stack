@@ -6,7 +6,8 @@ This document provides an overview of the user-related endpoints in the backend 
 
 1. [User Registration](#user-registration)
 2. [User Login](#user-login)
-3. [Future Endpoints](#future-endpoints)
+3. [User Profile](#user-profile)
+4. [Future Endpoints](#future-endpoints)
 
 ## User Registration
 
@@ -131,9 +132,51 @@ This endpoint allows existing users to log in by providing their email and passw
 - The authentication token is stored in a secure, HTTP-only cookie to prevent XSS attacks.
 - The `secure` flag is set for cookies in production environments to ensure they are only sent over HTTPS.
 
+## User Profile
+
+### URL
+
+`GET /api/users/profile`
+
+### Description
+
+This endpoint allows authenticated users to retrieve their profile information.
+
+### Request
+
+- **Method**: GET
+- **Headers**: 
+  - `Authorization`: Bearer token (required)
+
+### Response
+
+- **Success (200 OK)**:
+  - **Body**: JSON object containing:
+    - `success` (boolean): `true`
+    - `user` (object): The user's profile information.
+
+- **Error (401 Unauthorized)**:
+  - **Body**: JSON object containing:
+    - `success` (boolean): `false`
+    - `message` (string): Error message indicating unauthorized access.
+
+- **Error (500 Internal Server Error)**:
+  - **Body**: JSON object containing:
+    - `success` (boolean): `false`
+    - `message` (string): Error message indicating an internal error.
+
+### Error Handling
+
+- The endpoint checks for a valid authentication token and returns a 401 status code if the token is missing or invalid.
+- Any unexpected errors during profile retrieval result in a 500 status code.
+
+### Security
+
+- The endpoint requires a valid authentication token to access user profile information.
+
 ## Future Endpoints
 
-This section is reserved for documentation of additional user endpoints such as profile update, password reset, etc. As new endpoints are developed, they should be documented here following the same structure as the User Registration and User Login sections.
+This section is reserved for documentation of additional user endpoints such as profile update, password reset, etc. As new endpoints are developed, they should be documented here following the same structure as the User Registration, User Login, and User Profile sections.
 
 ## Notes
 

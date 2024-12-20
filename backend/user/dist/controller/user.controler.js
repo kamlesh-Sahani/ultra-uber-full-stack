@@ -1,5 +1,6 @@
 import userModel from "../models/user.model.js";
 import { generateToken } from "../utils/utils.js";
+import jwt from "jsonwebtoken";
 export const userRegister = async (req, res) => {
     try {
         const { name, email, password, safety, gender, isStudent, contact } = req.body;
@@ -86,6 +87,42 @@ export const userLogin = async (req, res) => {
             message: "user successuly logined",
             token,
             user
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message || "internal error"
+        });
+    }
+};
+export const userProfile = async (req, res) => {
+    try {
+        /** headers:{
+         * Authorization:Bearer fshdjfhsdfkjkhf(token)
+         * --
+         * --
+         *
+         * }  */
+        const token = req.cookies["auth-token"] || req.headers?.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "unauthenticate user"
+            });
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await userModel.findById(decoded._id);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "unauthenticate user"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "successuly founded the profile",
+            profile: user
         });
     }
     catch (error) {
